@@ -1,0 +1,81 @@
+{% extends "base.html" %} {% block content %}
+
+<div>
+<div class="chat-container">
+  <div class="chat-header">
+    <div class="chat-body">
+	 <div class="chat-message sent">
+      <p>Hello</p><img src="{{ url_for('static', filename='uploads/profile.png') }}" style="height:45px;">
+    </div>
+    <div class="chat-message received">
+      <img src="{{ url_for('static', filename='uploads/profile.png') }}" style="height:45px;"><p>Hello! How can I assist you today?</p>
+    </div>
+    <div class="chat-message sent">
+      <p>Hi! I have a question about your products.</p><img src="{{ url_for('static', filename='uploads/profile.png') }}" style="height:45;">
+    </div>
+  </div>
+  <div class="chat-footer">
+    <input type="text" id="message" placeholder="Type your message...">
+    <button id="submit">Submit</button>
+    <button style="margin-left:10px;"><img src="{{ url_for('static', filename='uploads/mike.png') }}" style="height:24px;"></button>
+	<button style="margin-left:10px;background:#E7AF60 !important"><img src="{{ url_for('static', filename='uploads/speaker.png') }}" style="height:24px;"></button>
+  </div>
+
+</div>
+</div>
+<script>
+$(document).ready(function()
+{
+	<!-- alert('5555'); -->
+	$("#submit").click(function(){
+	var mes = $("#message").val();
+	if(mes != '')
+	{
+		<!-- $(".chat-body").append('<div class="chat-message sent"><p>'+mes+'</p><img src="{{ url_for("static", filename="uploads/profile.png") }}" style="height:45px;">'); -->
+		
+		$(".chat-body").append('<div class="chat-message received"><img src="{{ url_for("static", filename="uploads/profile.png") }}" style="height:45px;"><p>'+mes+'</div>');
+      $.ajax({
+        url: "/response?text="+mes,
+        type: "GET",
+        success:function(resp){
+						<!-- alert('hiii'); -->
+						$("#message").val('');
+						
+						$(".chat-body").append('<div class="chat-message sent"><p>'+resp+'</p><img src="{{ url_for("static", filename="uploads/profile.png") }}" style="height:45px;">');
+					},
+					error: function (response) {
+						$('#msg').html('Some Error occured.'); // display error response
+					}
+				});
+		
+	}
+	});
+
+  $('#message').keydown(function (e) {
+    if (e.keyCode == 13) {
+      var mes = $("#message").val();
+	if(mes != '')
+	{
+		<!-- $(".chat-body").append('<div class="chat-message sent"><p>'+mes+'</p><img src="{{ url_for("static", filename="uploads/profile.png") }}" style="height:45px;">'); -->
+		
+		$(".chat-body").append('<div class="chat-message received"><img src="{{ url_for("static", filename="uploads/profile.png") }}" style="height:45px;"><p>'+mes+'</div>');
+      $.ajax({
+        url: "/response?text="+mes,
+        type: "GET",
+        success:function(resp){
+						<!-- alert('hiii'); -->
+						$("#message").val('');
+						
+						$(".chat-body").append('<div class="chat-message sent"><p>'+resp+'</p><img src="{{ url_for("static", filename="uploads/profile.png") }}" style="height:45px;">');
+					},
+					error: function (response) {
+						$('#msg').html('Some Error occured.'); // display error response
+					}
+				});
+		
+	  }
+    }
+  });  
+});
+</script>
+{% endblock %}
